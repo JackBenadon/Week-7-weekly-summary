@@ -1,5 +1,5 @@
 ---
-title: "Weekly Summary Template"
+title: "Week 7 Weekly Summary"
 author: "Author Name"
 title-block-banner: true
 title-block-style: default
@@ -15,32 +15,176 @@ format: html
 ::: {.callout-important}
 ## TIL
 
-Include a _very brief_ summary of what you learnt in this class here. 
-
 Today, I learnt the following concepts in class:
 
-1. Item 1
-1. Item 2
-1. Item 3
+1. Multicolinearity 
+1. Variable selection
+1. Shrinkage estimators
 :::
 
-Provide more concrete details here. You can also use footenotes[^footnote] if you like
 
 ```{R results='hide'}
 #| output: false
 library(dplyr)
 library(purrr)
+library(ISLR2)
+library(tidyr)
+library(readr)
+library(glmnet)
+library(caret)
+library(car)
 ```
 
+## Regularization / Shrinkage Estimators
+Regularization achieves a simialr objective using a slightly different strategy.
 
-For example: 
-in class we learnt we learnt about the `map` function from the `purrr` package. 
+Mathematically we're trying to find a solution to this:
+$$
+(b1, b2, \dots, b_p) = arg min L(\beta_0, \beta_2, \dots, \beta_p)
+$$
+If we want to select only a subset of these variables in our final model we can include a penalty term:
+$p_\lambda(\beta_1, \dots, \beta_p)$
+This favors solutions which select smaller subsets of the variables.
+
+The most common penalty functions are:
+
+1. ridge regression estimator. 
+
+2. LASSO regression. It is the most popular one, it looks at the absolute value of the estimators
+
+3. general case in `glmnet()`
+
+unlike lm glmnet doesnt take in a formula
+
+glmnet(X,y)
+X: matrix of the covariates
+y: response vector
+
+```{R}
+#attach the work from last week
+library(ISLR2)
+attach(Boston)
+df <- Boston
 
 
-```{R results='hide', fig.width=7, fig.height=7}
-par(mfrow=c(3, 3), mar=c(3.5, 3.5, 2, 1), mgp=c(2.4, 0.8, 0))
-map(1:9, function(i)rnorm(1000) %>% hist(., main=i, col=i))
+full_model <- lm(medv ~ . , df)
+
+
+model_indus <- lm(medv ~indus, df)
+
+R <- df %>%
+keep(is.numeric) %>%
+cor()
+
+new_cols <- colnames(df) [-c(5,13)]
+model <-lm(medv ~ . , df %>% select(-c(indus, nox, dis)))
+
+
 ```
+
+```{R}
+X <- model.matrix(full_model)[, -1]
+head(X)
+```
+```{R}
+all_cols <- 1:ncol(X)
+drop_scale <- c(4)
+include_scale <- all_cols[-drop_scale]
+
+for (i in include_scale){ X[, i] <- scale (X[, i])}
+```
+
+```{R}
+y <- df$medv
+```
+```{R}
+library(glmnet)
+lasso <- cv.glmnet(X,y,alpha =1)
+
+plot(lasso)
+```
+The graph above is plotting the sum of squares residuals (mean square error) on the y and Log($\lambda$) on the x axis. As lambda increases the effect of the penalty on the final solution will get a lot stronger.
+
+### _How do I know what the appropriate value of $\lambda$ is?_
+Minimizing the mean square error is one way to approach it but it would pick a lot of variables, so this isn't an effective way to solve this. 
+The dotted line on the graph is called the `elbow point`. They mark the most stable solutions before the graph spikes upwards and the MSE increases too much.
+
+```{R}
+lambdas <- 10^ seq(-2, 1, length.out = 1000)
+lasso <- cv.glmnet(X, y ,alpha =1, lambda = lambdas)
+plot(lasso)
+```
+
+```{R}
+lasso_coef <- coef(lasso, s = 'lambda.min')
+selected_vars <- rownames(lasso_coef)[which(abs(lasso_coef)> 0)] [-1]
+lasso_coef
+selected_vars
+```
+lasso is very useful because you can do it in one step. However, this can be deceiving as there are steps you have to do prior.
+
+
+## Gradient Descent
+#### _A general recipe for fitting models_
+A minimizer has to have a flat line and that the second derivative has to be positive (This helps confirm that the point is a minimizer rather than a maximizer).
+
+1. compute the gradient
+
+2. Choose a step size
+
+3. Perform gradient descent
+
+4. stop when the relative improvement is small
+
+#### Using gradient descent with the `cars` dataset
+
+```{R}
+attach(cars)
+t(cars)
+```
+
+```{R}
+plot(cars)
+```
+
+```{R}
+Loss <- function(b, x,y){
+  squares <- (y - b[1]-b[2] * x)^2
+  return(sum(squares))
+}
+b <- rnorm(2)
+Loss(b, cars$speed, cars$dist)
+```
+
+```{R}
+grad <- function(b, Loss, x, y, eps=1e-5) {
+  b0_up <- Loss(c(b[1] + eps, b[2]) ,x,y)
+  b0_dn <- Loss(c(b[1] - eps, b[2]) ,x,y)
+  
+  b1_up <- Loss(c(b[1] + eps, b[2]) ,x,y)
+  b1_dn <- Loss(c(b[1] - eps, b[2]) ,x,y)
+  
+  grad_b0_L <- (b0_up - b0_dn) / (2*eps)
+  grad_b1_L <- (b1_up - b1_dn) / (2*eps)
+  
+  return(c(grad_b0_L, grad_b1_L))
+}
+
+grad(b,Loss, cars$speed, cars$dist)
+```
+
+```{R}
+steps <- 1000
+L <- rep(Inf, steps)
+b <- 10 *rnorm(2)
+
+# I dont know what "eta" is. Maybe he initialized it and I didn't see it
+#for (i in 1:steps){
+#  b <- b - eta * grad(b,Loss, cars$speed, cars$dist)
+#  L[i] <- Loss(b, cars$speed, cars$dist)
+#}
+```
+
 
 
 
@@ -60,17 +204,11 @@ Today, I learnt the following concepts in class:
 1. Item 3
 :::
 
-Provide more concrete details here, e.g., 
-
-In class we learnt how to use the `map` function to create multiple regression diagnostic plots
-
-```{R results='hide', fig.height=4}
-par(mfcol=c(2, 3), mar=c(3.5, 3.5, 2, 1), mgp=c(2.4, 0.8, 0))
-mtcars %>%
-  split(.$cyl) %>%
-  map(~ lm(mpg ~ wt, data = .x)) %>%
-  map(function(x)plot(x, which=c(1, 2)))
+```{R}
+library(torch)
 ```
 
+
+Provide more concrete details here, e.g., 
 
 [^footnote]: You can include some footnotes here
