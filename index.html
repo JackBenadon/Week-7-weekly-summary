@@ -132,13 +132,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#tuesday-jan-17" id="toc-tuesday-jan-17" class="nav-link active" data-scroll-target="#tuesday-jan-17">Tuesday, Jan 17</a></li>
+  <li><a href="#tuesday-feb-21" id="toc-tuesday-feb-21" class="nav-link active" data-scroll-target="#tuesday-feb-21">Tuesday, Feb 21</a></li>
   <li><a href="#regularization-shrinkage-estimators" id="toc-regularization-shrinkage-estimators" class="nav-link" data-scroll-target="#regularization-shrinkage-estimators">Regularization / Shrinkage Estimators</a>
   <ul class="collapse">
   <li><a href="#how-do-i-know-what-the-appropriate-value-of-lambda-is" id="toc-how-do-i-know-what-the-appropriate-value-of-lambda-is" class="nav-link" data-scroll-target="#how-do-i-know-what-the-appropriate-value-of-lambda-is"><em>How do I know what the appropriate value of <span class="math inline">\(\lambda\)</span> is?</em></a></li>
   </ul></li>
   <li><a href="#gradient-descent" id="toc-gradient-descent" class="nav-link" data-scroll-target="#gradient-descent">Gradient Descent</a></li>
-  <li><a href="#thursday-jan-19" id="toc-thursday-jan-19" class="nav-link" data-scroll-target="#thursday-jan-19">Thursday, Jan 19</a></li>
+  <li><a href="#thursday-feb-23" id="toc-thursday-feb-23" class="nav-link" data-scroll-target="#thursday-feb-23">Thursday, Feb 23</a></li>
+  <li><a href="#automatic-differentiation" id="toc-automatic-differentiation" class="nav-link" data-scroll-target="#automatic-differentiation">Automatic Differentiation</a></li>
+  <li><a href="#cross-validation" id="toc-cross-validation" class="nav-link" data-scroll-target="#cross-validation">Cross validation</a></li>
+  <li><a href="#k-fold-crpss-validation" id="toc-k-fold-crpss-validation" class="nav-link" data-scroll-target="#k-fold-crpss-validation">K-Fold Crpss Validation</a></li>
   </ul>
 </nav>
 </div>
@@ -148,8 +151,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <hr>
-<section id="tuesday-jan-17" class="level2">
-<h2 class="anchored" data-anchor-id="tuesday-jan-17">Tuesday, Jan 17</h2>
+<section id="tuesday-feb-21" class="level2">
+<h2 class="anchored" data-anchor-id="tuesday-feb-21">Tuesday, Feb 21</h2>
 <div class="callout-important callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -262,25 +265,25 @@ TIL
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>lasso_coef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>13 x 1 sparse Matrix of class "dgCMatrix"
-                    s1
-(Intercept) 22.3366551
-crim        -0.9633387
-zn           0.9806186
-indus        .        
-chas         2.8357856
-nox         -1.9971097
-rm           2.6265452
-age          .        
-dis         -2.9985199
-rad          2.0912719
-tax         -1.7583144
-ptratio     -1.9826034
-lstat       -3.8969409</code></pre>
+                     s1
+(Intercept) 22.33612254
+crim        -0.98332703
+zn           1.00474825
+indus        .         
+chas         2.84348552
+nox         -2.02849211
+rm           2.61419413
+age          0.01007126
+dis         -3.04124398
+rad          2.18394575
+tax         -1.83420909
+ptratio     -1.99109751
+lstat       -3.90133716</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>selected_vars</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "crim"    "zn"      "chas"    "nox"     "rm"      "dis"     "rad"    
- [8] "tax"     "ptratio" "lstat"  </code></pre>
+<pre><code> [1] "crim"    "zn"      "chas"    "nox"     "rm"      "age"     "dis"    
+ [8] "rad"     "tax"     "ptratio" "lstat"  </code></pre>
 </div>
 </div>
 <p>lasso is very useful because you can do it in one step. However, this can be deceiving as there are steps you have to do prior.</p>
@@ -335,7 +338,7 @@ dist     85</code></pre>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">2</span>)</span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">Loss</span>(b, cars<span class="sc">$</span>speed, cars<span class="sc">$</span>dist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 182931.7</code></pre>
+<pre><code>[1] 153799.4</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -354,24 +357,25 @@ dist     85</code></pre>
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="fu">grad</span>(b,Loss, cars<span class="sc">$</span>speed, cars<span class="sc">$</span>dist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -5345.5 -5345.5</code></pre>
+<pre><code>[1] -4838.325 -4838.325</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>steps <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">Inf</span>, steps)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">*</span><span class="fu">rnorm</span>(<span class="dv">2</span>)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># I dont know what "eta" is. Maybe he initialized it and I didn't see it</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#for (i in 1:steps){</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  b &lt;- b - eta * grad(b,Loss, cars$speed, cars$dist)</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  L[i] &lt;- Loss(b, cars$speed, cars$dist)</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>eta <span class="ot">&lt;-</span> <span class="fl">1e-7</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">*</span><span class="fu">rnorm</span>(<span class="dv">2</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>steps){</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> b <span class="sc">-</span> eta <span class="sc">*</span> <span class="fu">grad</span>(b,Loss, cars<span class="sc">$</span>speed, cars<span class="sc">$</span>dist)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  L[i] <span class="ot">&lt;-</span> <span class="fu">Loss</span>(b, cars<span class="sc">$</span>speed, cars<span class="sc">$</span>dist)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
-<section id="thursday-jan-19" class="level2">
-<h2 class="anchored" data-anchor-id="thursday-jan-19">Thursday, Jan 19</h2>
+<section id="thursday-feb-23" class="level2">
+<h2 class="anchored" data-anchor-id="thursday-feb-23">Thursday, Feb 23</h2>
 <div class="callout-important callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -385,16 +389,312 @@ TIL
 <p>Include a <em>very brief</em> summary of what you learnt in this class here.</p>
 <p>Today, I learnt the following concepts in class:</p>
 <ol type="1">
-<li>Item 1</li>
-<li>Item 2</li>
-<li>Item 3</li>
+<li>Automatic Differentiation</li>
+<li>pytorch</li>
+<li>Cross validation</li>
 </ol>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(torch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Provide more concrete details here, e.g.,</p>
+<p>Torch was developed by Facebook and we will use it for the more advanced machine learning examples in this class.</p>
+</section>
+<section id="automatic-differentiation" class="level2">
+<h2 class="anchored" data-anchor-id="automatic-differentiation">Automatic Differentiation</h2>
+<p>The goal of automatic differentiation is to get rid of having to write functions like the <code>grad</code> function we wrote last class. Ideally we automatically compute the gradient with respect to the parameters.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">torch_randn</span>(<span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">1</span>), <span class="at">requires_grad =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch_tensor
+-0.5354
+-0.6906
+ 0.0951
+ 0.5577
+ 1.1743
+[ CPUFloatType{5,1} ][ requires_grad = TRUE ]</code></pre>
+</div>
+</div>
+<p>In torch everything is called a <em>tensor</em>. For example a vector is a 1 dimensional tensor.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">torch_norm</span>(x)<span class="sc">^</span><span class="dv">10</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">f</span>(x)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch_tensor
+90.573
+[ CPUFloatType{} ][ grad_fn = &lt;PowBackward0&gt; ]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>y<span class="sc">$</span><span class="fu">backward</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>x<span class="sc">$</span>grad</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch_tensor
+-196.8976
+-253.9872
+  34.9681
+ 205.1126
+ 431.9089
+[ CPUFloatType{5,1} ]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">5</span> <span class="sc">*</span> <span class="fu">torch_norm</span>(x)<span class="sc">^</span><span class="dv">8</span>) <span class="sc">*</span> (<span class="dv">2</span><span class="sc">*</span>x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch_tensor
+-196.8976
+-253.9872
+  34.9681
+ 205.1125
+ 431.9089
+[ CPUFloatType{5,1} ][ grad_fn = &lt;MulBackward0&gt; ]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x,y){</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(x<span class="sc">*</span>y)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">f</span>(x,y)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>z <span class="co">#z is the dot product of x and y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch_tensor
+54.45
+[ CPUFloatType{} ][ grad_fn = &lt;SumBackward0&gt; ]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(x<span class="sc">$</span>grad, y<span class="sc">$</span>grad) <span class="co">#x$grad = partial derivative of x </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+torch_tensor
+-196.8976
+-253.9872
+  34.9681
+ 205.1126
+ 431.9089
+[ CPUFloatType{5,1} ]
+
+[[2]]
+torch_tensor
+[ Tensor (undefined) ]</code></pre>
+</div>
+</div>
+<section id="example-3" class="level4">
+<h4 class="anchored" data-anchor-id="example-3">Example 3:</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>x<span class="ot">&lt;-</span> <span class="fu">torch_tensor</span>(cars<span class="sc">$</span>speed, <span class="at">dtype =</span> <span class="fu">torch_float</span>())</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">torch_tensor</span>(cars<span class="sc">$</span>dist, <span class="at">dtype =</span> <span class="fu">torch_float</span>())</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">torch_zeros</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="at">dtype =</span> <span class="fu">torch_float</span>(), <span class="at">requires_grad =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch_tensor
+ 0
+ 0
+[ CPUFloatType{2,1} ][ requires_grad = TRUE ]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>loss <span class="ot">&lt;-</span> <span class="fu">nn_mse_loss</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">torch_zeros</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="at">dtype =</span> <span class="fu">torch_float</span>(), <span class="at">requires_grad =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>steps <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">Inf</span>,steps)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>eta <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>optimizer <span class="ot">&lt;-</span> <span class="fu">optim_adam</span>(b, <span class="at">lr=</span>eta) <span class="co">#optional but gradient descent isnt optimal, there other more efficient methods. Torch has multiple and they will change your result.</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>steps){</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  y_hat <span class="ot">&lt;-</span> x<span class="sc">*</span>b[<span class="dv">2</span>] <span class="sc">+</span>b[<span class="dv">1</span>]</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  l <span class="ot">&lt;-</span> <span class="fu">loss</span>(y_hat, y)</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  L[i] <span class="ot">&lt;-</span> l<span class="sc">$</span><span class="fu">item</span>()</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  optimizer<span class="sc">$</span><span class="fu">zero_grad</span>()</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  l<span class="sc">$</span><span class="fu">backward</span>()</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>  optimizer<span class="sc">$</span><span class="fu">step</span>()</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (i <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">||</span> i <span class="sc">%%</span> <span class="dv">200</span> <span class="sc">==</span> <span class="dv">0</span>){</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Iteration: %s</span><span class="sc">\t</span><span class="st"> Loss value: %s</span><span class="sc">\n</span><span class="st">"</span>, i, L[i]))</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Iteration: 1     Loss value: 2498.06005859375
+Iteration: 2     Loss value: 1759.53002929688
+Iteration: 3     Loss value: 1174.45300292969
+Iteration: 4     Loss value: 742.353759765625
+Iteration: 5     Loss value: 457.703643798828
+Iteration: 6     Loss value: 307.684936523438
+Iteration: 7     Loss value: 270.263397216797
+Iteration: 8     Loss value: 314.067993164062
+Iteration: 9     Loss value: 401.761566162109
+Iteration: 10    Loss value: 496.908325195312
+Iteration: 200   Loss value: 231.474166870117
+Iteration: 400   Loss value: 227.114730834961
+Iteration: 600   Loss value: 227.070495605469
+Iteration: 800   Loss value: 227.070404052734
+Iteration: 1000  Loss value: 227.070404052734
+Iteration: 1200  Loss value: 227.070404052734
+Iteration: 1400  Loss value: 227.070404052734
+Iteration: 1600  Loss value: 227.070404052734
+Iteration: 1800  Loss value: 227.070404052734
+Iteration: 2000  Loss value: 227.070404052734
+Iteration: 2200  Loss value: 227.070404052734
+Iteration: 2400  Loss value: 227.070434570312
+Iteration: 2600  Loss value: 227.070434570312
+Iteration: 2800  Loss value: 227.070434570312
+Iteration: 3000  Loss value: 227.070434570312
+Iteration: 3200  Loss value: 227.070434570312
+Iteration: 3400  Loss value: 227.070388793945
+Iteration: 3600  Loss value: 227.070404052734
+Iteration: 3800  Loss value: 227.070434570312
+Iteration: 4000  Loss value: 227.070404052734
+Iteration: 4200  Loss value: 227.070434570312
+Iteration: 4400  Loss value: 227.070434570312
+Iteration: 4600  Loss value: 227.070434570312
+Iteration: 4800  Loss value: 227.070404052734
+Iteration: 5000  Loss value: 227.070404052734
+Iteration: 5200  Loss value: 227.132614135742
+Iteration: 5400  Loss value: 227.070434570312
+Iteration: 5600  Loss value: 227.070434570312
+Iteration: 5800  Loss value: 227.071487426758
+Iteration: 6000  Loss value: 227.070434570312
+Iteration: 6200  Loss value: 227.070388793945
+Iteration: 6400  Loss value: 227.070404052734
+Iteration: 6600  Loss value: 227.070434570312
+Iteration: 6800  Loss value: 227.070404052734
+Iteration: 7000  Loss value: 227.352798461914
+Iteration: 7200  Loss value: 227.070449829102
+Iteration: 7400  Loss value: 227.070434570312
+Iteration: 7600  Loss value: 227.070388793945
+Iteration: 7800  Loss value: 227.070434570312
+Iteration: 8000  Loss value: 227.070434570312
+Iteration: 8200  Loss value: 227.070404052734
+Iteration: 8400  Loss value: 227.070404052734
+Iteration: 8600  Loss value: 227.479217529297
+Iteration: 8800  Loss value: 227.070434570312
+Iteration: 9000  Loss value: 227.070404052734
+Iteration: 9200  Loss value: 227.070404052734
+Iteration: 9400  Loss value: 227.071685791016
+Iteration: 9600  Loss value: 227.070434570312
+Iteration: 9800  Loss value: 227.070404052734
+Iteration: 10000     Loss value: 227.070434570312</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="short-tangent-on-aic" class="level4">
+<h4 class="anchored" data-anchor-id="short-tangent-on-aic">Short tangent on AIC</h4>
+<p>There isn’t much that is special about it but it is something that people like to use. However, data miners and data scientists started using an other model called cross validation</p>
+</section>
+</section>
+<section id="cross-validation" class="level2">
+<h2 class="anchored" data-anchor-id="cross-validation">Cross validation</h2>
+<p>We split the data set in 2 parts, randomly chooses 100 rows and not let the model see then. We use the 900 row to train it and the 100 to test it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> Boston <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>()</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     crim zn indus chas   nox    rm  age    dis rad tax ptratio lstat medv
+1 0.00632 18  2.31    0 0.538 6.575 65.2 4.0900   1 296    15.3  4.98 24.0
+2 0.02731  0  7.07    0 0.469 6.421 78.9 4.9671   2 242    17.8  9.14 21.6
+3 0.02729  0  7.07    0 0.469 7.185 61.1 4.9671   2 242    17.8  4.03 34.7
+4 0.03237  0  2.18    0 0.458 6.998 45.8 6.0622   3 222    18.7  2.94 33.4
+5 0.06905  0  2.18    0 0.458 7.147 54.2 6.0622   3 222    18.7  5.33 36.2
+6 0.02985  0  2.18    0 0.458 6.430 58.7 6.0622   3 222    18.7  5.21 28.7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 506  13</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>fold <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df)<span class="sc">/</span><span class="dv">5</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>fold</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1]  55 256 477  80 350 497 166 402  96  99  81  95 418  73 252 491 174 316
+ [19] 267 202 165 251  19 422 315 488  23 243 484 499 470 317 321 200  10 100
+ [37] 400 369  89  74 186 380 163  33 294 208 257  90 446 452 122  16 300 112
+ [55] 308 361  14 303 375 180 371  30 120 216 299 329 173 304 370 410  32 394
+ [73] 427 116  62 269 433 233 334 342 297 498 275 434 151 177 103   4  84 414
+ [91]  44 268 265 271  67 311  31 483 132  56 460</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="sc">-</span>fold)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">slice</span>(fold)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(test) <span class="sc">+</span> <span class="fu">nrow</span>(train) <span class="sc">-</span> <span class="fu">nrow</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>model<span class="ot">&lt;-</span><span class="fu">lm</span>(medv <span class="sc">~</span> ., <span class="at">data =</span> train)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = medv ~ ., data = train)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-13.3226  -2.7932  -0.6707   1.7408  26.4814 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  40.691305   5.351152   7.604 2.14e-13 ***
+crim         -0.126050   0.032537  -3.874 0.000125 ***
+zn            0.044008   0.015007   2.933 0.003559 ** 
+indus         0.028173   0.068152   0.413 0.679553    
+chas          1.535613   0.892332   1.721 0.086058 .  
+nox         -18.130345   4.042177  -4.485 9.58e-06 ***
+rm            3.872646   0.448041   8.644  &lt; 2e-16 ***
+age          -0.006239   0.014459  -0.431 0.666350    
+dis          -1.419967   0.212578  -6.680 8.22e-11 ***
+rad           0.292906   0.071825   4.078 5.50e-05 ***
+tax          -0.014404   0.004093  -3.519 0.000484 ***
+ptratio      -0.977458   0.142155  -6.876 2.44e-11 ***
+lstat        -0.478386   0.054806  -8.729  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.612 on 392 degrees of freedom
+Multiple R-squared:  0.7482,    Adjusted R-squared:  0.7405 
+F-statistic: 97.09 on 12 and 392 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>mspe <span class="ot">&lt;-</span> <span class="fu">mean</span>((test<span class="sc">$</span>medv <span class="sc">-</span> y_test)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>mspe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 31.21189</code></pre>
+</div>
+</div>
+</section>
+<section id="k-fold-crpss-validation" class="level2">
+<h2 class="anchored" data-anchor-id="k-fold-crpss-validation">K-Fold Crpss Validation</h2>
+<p>Now instead of splitting it as 1/5 we can split it however we want. We can give the model as much training and testing data as we see fit. When we train it as 80% train and 20% test the mspe went down. This is because there is variability in the result that comes from what data we split. Since we split it randomly the result changes.</p>
+<p>K-Fold cross validation eliminates this by splitting the data set into 5 disjoint subsets. And then we select one of the 5 as the test and the other 4 as training data sets.</p>
 </section>
 
 </main>

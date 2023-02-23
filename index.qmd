@@ -10,7 +10,7 @@ format: html
 
 ---
 
-## Tuesday, Jan 17
+## Tuesday, Feb 21
 
 ::: {.callout-important}
 ## TIL
@@ -176,19 +176,19 @@ grad(b,Loss, cars$speed, cars$dist)
 ```{R}
 steps <- 1000
 L <- rep(Inf, steps)
+eta <- 1e-7
 b <- 10 *rnorm(2)
 
-# I dont know what "eta" is. Maybe he initialized it and I didn't see it
-#for (i in 1:steps){
-#  b <- b - eta * grad(b,Loss, cars$speed, cars$dist)
-#  L[i] <- Loss(b, cars$speed, cars$dist)
-#}
+
+for (i in 1:steps){
+  b <- b - eta * grad(b,Loss, cars$speed, cars$dist)
+  L[i] <- Loss(b, cars$speed, cars$dist)
+}
 ```
 
 
 
-
-## Thursday, Jan 19
+## Thursday, Feb 23
 
 
 
@@ -199,16 +199,148 @@ Include a _very brief_ summary of what you learnt in this class here.
 
 Today, I learnt the following concepts in class:
 
-1. Item 1
-1. Item 2
-1. Item 3
+1. Automatic Differentiation
+1. pytorch
+1. Cross validation
 :::
 
 ```{R}
 library(torch)
 ```
+Torch was developed by Facebook and we will use it for the more advanced machine learning examples in this class.
+
+## Automatic Differentiation
+The goal of automatic differentiation is to get rid of having to write functions like the `grad` function we wrote last class. Ideally we automatically compute the gradient with respect to the parameters.
+
+```{R}
+x <- torch_randn(c(5,1), requires_grad = TRUE)
+x
+```
+In torch everything is called a _tensor_. For example a vector is a 1 dimensional tensor.
+
+```{R}
+f <- function(x){
+    torch_norm(x)^10
+}
+
+y <- f(x)
+y
+y$backward()
+```
+
+```{R}
+x$grad
+```
+
+```{R}
+(5 * torch_norm(x)^8) * (2*x)
+```
+```{R}
+f <- function(x,y){
+    sum(x*y)
+}
+z <- f(x,y)
+z #z is the dot product of x and y
+
+```
+
+```{R}
+c(x$grad, y$grad) #x$grad = partial derivative of x 
+```
+#### Example 3:
+```{R}
+x<- torch_tensor(cars$speed, dtype = torch_float())
+y <- torch_tensor(cars$dist, dtype = torch_float())
+
+plot(x,y)
+```
+
+```{R}
+b <- torch_zeros(c(2,1), dtype = torch_float(), requires_grad = TRUE)
+b
+```
+
+```{R}
+loss <- nn_mse_loss()
+```
+
+```{R}
+b <- torch_zeros(c(2,1), dtype = torch_float(), requires_grad = TRUE)
+steps <- 10000
+L <- rep(Inf,steps)
+eta <- 0.5
+optimizer <- optim_adam(b, lr=eta) #optional but gradient descent isnt optimal, there other more efficient methods. Torch has multiple and they will change your result.
+for (i in 1:steps){
+  y_hat <- x*b[2] +b[1]
+  l <- loss(y_hat, y)
+  
+  L[i] <- l$item()
+  optimizer$zero_grad()
+  l$backward()
+  optimizer$step()
+  
+  if (i %in% c(1:10) || i %% 200 == 0){
+      cat(sprintf("Iteration: %s\t Loss value: %s\n", i, L[i]))
+  }
+}
+```
+
+```{R}
+plot(x,y)
+```
+#### Short tangent on AIC
+There isn't much that is special about it but it is something that people like to use. However, data miners and data scientists started using an other model called cross validation
 
 
-Provide more concrete details here, e.g., 
+## Cross validation
+We split the data set in 2 parts, randomly chooses 100 rows and not let the model see then. We use the 900 row to train it and the 100 to test it.
+```{R}
+df <- Boston %>% drop_na()
+head(df)
+dim(df)
+```
+
+```{R}
+k <- 5
+fold <- sample(1:nrow(df), nrow(df)/5)
+fold
+```
+
+```{R}
+train <- df %>% slice(-fold)
+test <- df %>% slice(fold)
+
+```
+
+```{R}
+nrow(test) + nrow(train) - nrow(df)
+```
+
+```{R}
+model<-lm(medv ~ ., data = train)
+summary(model)
+```
+
+```{R}
+y_test <- predict(model, newdata = test)
+```
+```{R}
+mspe <- mean((test$medv - y_test)^2)
+mspe
+```
+
+## K-Fold Cross Validation
+Now instead of splitting it as 1/5 we can split it however we want. We can give the model as much training and testing data as we see fit. When we train it as 80% train and 20% test the mspe went down. This is because there is variability in the result that comes from what data we split. Since we split it randomly the result changes.
+
+K-Fold cross validation eliminates this by splitting the data set into 5 disjoint subsets. And then we select one of the 5 as the test and the other 4 as training data sets. 
+
+
+
+
+
+
+
+
+
 
 [^footnote]: You can include some footnotes here
